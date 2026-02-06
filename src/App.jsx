@@ -1,10 +1,9 @@
+import Index from './01-usePopcorn/Index'
 
 function App() {
   return (
     <>
-      <h1>
-        new app.
-      </h1>
+      <Index />
     </>
   )
 }
