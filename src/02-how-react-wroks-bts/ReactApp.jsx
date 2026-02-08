@@ -1,5 +1,7 @@
 import './index.css'
-import { useState } from "react";
+import { useState }   from "react";
+import { v4 as uuidv4 } from 'uuid';
+
 
 const content = [
   {
@@ -40,7 +42,7 @@ function Tabbed({ content }) {
       </div>
 
       {activeTab <= 2 ? (
-        <TabContent item={content.at(activeTab)} />
+        <TabContent item={content.at(activeTab)} key={uuidv4()} />
       ) : (
         <DifferentContent />
       )}
@@ -48,7 +50,7 @@ function Tabbed({ content }) {
   );
 }
 
-function Tab({ num, activeTab, onClick }) {
+function Tab({ num, activeTab, onClick}) {
   return (
     <button
       className={activeTab === num ? "tab active" : "tab"}
