@@ -5,7 +5,8 @@ function App() {
   return (
     <>
       {/* <Index /> */}
-      <StarRating maxRating={5}/>
+      <StarRating messages={["Terrible", "Bad", "Good", "Very Good", "Sodalicious"]}> </StarRating>
+      {/* <StarRating size='24'color="pink" > </StarRating> */}
     </>
   )
 }
