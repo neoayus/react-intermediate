@@ -68,6 +68,14 @@ function TabContent({ item }) {
   function handleInc() {
     setLikes(likes + 1);
   }
+  function handleSuperInc() {
+    // setLikes(likes + 1);
+    // setLikes(likes + 1);
+    // setLikes(likes + 1);
+    setLikes(likes => likes + 1);
+    setLikes(likes => likes + 1);
+    setLikes(likes => likes + 1);
+  }
 
   console.log("RENDER!!");
 
@@ -96,7 +104,7 @@ function TabContent({ item }) {
         <div className="hearts-counter">
           <span>{likes} ❤️</span>
           <button onClick={handleInc}>+</button>
-          <button>+++</button>
+          <button onClick={handleSuperInc}>+++</button>
         </div>
       </div>
 
