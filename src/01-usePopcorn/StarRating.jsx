@@ -12,6 +12,17 @@ const startContainerStyle = {
   // gap: '4px',
 };
 
+//  Defining Prop Type for StarRatng Component : DEPRECATED (devs use typeScript Instead);
+StarRating.propTypes = {
+  maxRating : PropTypes.number,
+  color : PropTypes.string ,
+  size : PropTypes.number ,
+  className: PropTypes.string ,
+  messages : PropTypes.Array ,
+  defaultRating : PropTypes.number ,
+  onSetRating : PropTypes.func,
+}
+
 export default function StarRating({
   maxRating = 5,
   color = "#fcc419",
