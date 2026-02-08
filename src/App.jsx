@@ -1,9 +1,11 @@
-import Index from './01-usePopcorn/Index'
+// import Index from './01-usePopcorn/Index.jsx'
+import StarRating from './01-usePopcorn/StarRating.jsx'
 
 function App() {
   return (
     <>
-      <Index />
+      {/* <Index /> */}
+      <StarRating maxRating={5}/>
     </>
   )
 }
