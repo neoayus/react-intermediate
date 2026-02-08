@@ -1,8 +1,9 @@
-import React from './HOW-REACT-WORKS-UNDERNEATH/React.jsx'
+import ReactApp from './02-how-react-wroks-bts/ReactApp.jsx'
+
 function App() {
   return (
     <>
-      <React / 
+      <ReactApp />
     </>
   )
 }
