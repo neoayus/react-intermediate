@@ -58,18 +58,30 @@ export default function ReactApp() {
   const [movies, setMovies] = useState(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
   const [isLoading, setIsLoading] = useState(false);
-  const query = "interstellar" ;
+  const [error, setError] = useState("");
+  const query = "interstellar";
 
   useEffect(function () {
     async function fetchMovies() {
-      setIsLoading(true); // loading state
+      try {
+        // loading state (for the time data is still being loaded)
+        setIsLoading(true);
 
-      const res = await fetch(`https://www.omdbapi.com/?i=${KEY}&s=${query}`);
-      const data = await res.json();
-      setMovies(data.Search);
-      console.log(data.Search);
+        const res = await fetch(`https://www.omdbapi.com/?i=${KEY}&s=${query}`);
+        // error handeling (error while loading data, i.e. user offline)
+        if (data.Response === "False" )
+          throw new Error("Something went wrong while fetching Movie data");
 
-      setIsLoading(false); // loading state
+        const data = await res.json();
+        setMovies(data.Search);
+        console.log(data.Search);
+
+        setIsLoading(false); // loading state
+
+      } catch (err) {
+        console.error(err.message);
+        setError(err.message);
+      }
     }
     fetchMovies();
     return () => console.log("Clean Up");
@@ -84,7 +96,9 @@ export default function ReactApp() {
       <Main>
         <Box>
           {/* loading state used here to render conditionally  */}
-          { isLoading ? <Loader /> : <MovieList movies={movies} /> }
+          {isLoading && <Loader />}
+          {!isLoading && !error && <MovieList movies={movies} /> }
+          {error && <ErrorMessage message={error} /> }
         </Box>
         <Box>
           <WatchedSummary watched={watched} />
@@ -95,10 +109,13 @@ export default function ReactApp() {
   );
 }
 
-function Loader(){
-  return(
-    <p className="loader">
-      Loading...
+function Loader() {
+  return <p className="loader">Loading...</p>;
+}
+function ErrorMessage({message}) {
+  return (
+    <p className="error">
+      <span>ERROR:</span> {message}
     </p>
   )
 }
