@@ -95,6 +95,14 @@ export default function ReactApp() {
   );
 }
 
+function Loader(){
+  return(
+    <p className="loader">
+      Loading...
+    </p>
+  )
+}
+
 function Logo() {
   return (
     <div className="logo">
