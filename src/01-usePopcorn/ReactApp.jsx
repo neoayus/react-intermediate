@@ -70,17 +70,17 @@ export default function ReactApp() {
         const res = await fetch(`https://www.omdbapi.com/?i=${KEY}&s=${query}`);
         // error handeling (error while loading data, i.e. user offline)
         if (data.Response === "False" )
-          throw new Error("Something went wrong while fetching Movie data");
+          throw new Error("Movie Not Found : ( ");
 
         const data = await res.json();
         setMovies(data.Search);
         console.log(data.Search);
 
-        setIsLoading(false); // loading state
-
       } catch (err) {
         console.error(err.message);
         setError(err.message);
+      }finally{
+        setIsLoading(false); // loading state
       }
     }
     fetchMovies();
