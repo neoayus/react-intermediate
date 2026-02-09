@@ -57,15 +57,19 @@ const KEY = "tt3896198&apikey=9c6a2e51";
 export default function ReactApp() {
   const [movies, setMovies] = useState(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
-  const [query, setQuery] = useState("interstellar");
+  const [isLoading, setIsLoading] = useState(false);
+  const query = "interstellar" ;
 
   useEffect(function () {
     async function fetchMovies() {
-      const omdbURL = `https://www.omdbapi.com/?i=${KEY}&s=${query}`;
-      const res = await fetch(omdbURL);
+      setIsLoading(true); // loading state
+
+      const res = await fetch(`https://www.omdbapi.com/?i=${KEY}&s=${query}`);
       const data = await res.json();
       setMovies(data.Search);
       console.log(data.Search);
+
+      setIsLoading(false); // loading state
     }
     fetchMovies();
     return () => console.log("Clean Up");
@@ -79,7 +83,8 @@ export default function ReactApp() {
       </Navbar>
       <Main>
         <Box>
-          <MovieList movies={movies} />
+          {/* loading state used here to render conditionally  */}
+          { isLoading ? <Loader /> : <MovieList movies={movies} /> }
         </Box>
         <Box>
           <WatchedSummary watched={watched} />
