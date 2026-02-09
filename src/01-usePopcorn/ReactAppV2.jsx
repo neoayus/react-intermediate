@@ -1,3 +1,4 @@
+// BAD EXAMPLE OF "how to fetch data in react"
 import './Index.css'
 import { useState } from "react";
 
@@ -48,12 +49,23 @@ const tempWatchedData = [
   },
 ];
 
+// omdb api key 
+const KEY = "tt3896198&apikey=9c6a2e51" ; 
+
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
 export default function ReactAppV2() {
-  const [movies, setMovies] = useState(tempMovieData);
-  const [watched, setWatched] = useState(tempWatchedData);
+
+  const [movies, setMovies] = useState([]);
+  const [watched, setWatched] = useState([]);
+ 
+  // THIS IS HOW NOT TO FETCH DATA IN REACT (IT CAUSEDS A RENDER EVERY TIME DATA LOADS WHICH THEN CREATES AN INFINITE LOOP :3)
+  // const omdbURL = `https://www.omdbapi.com/?i=${KEY}&s=interstellar`;
+  // fetch(omdbURL)
+  //   .then(res => res.json())
+  //   .then(data => setMovies(data));
+
   return (
     <>
       <Navbar>
