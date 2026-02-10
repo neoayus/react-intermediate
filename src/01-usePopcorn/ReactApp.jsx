@@ -52,7 +52,7 @@ const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
 // omdb api key
-const KEY = "tt3896198&apikey=9c6a2e51";
+const KEY = "9c6a2e51";
 
 export default function ReactApp() {
   const [query, setQuery] = useState("");
@@ -79,7 +79,8 @@ export default function ReactApp() {
           setIsLoading(true);
 
           const res = await fetch(
-            `https://www.omdbapi.com/?i=${KEY}&s=${query}`,
+            // `https://www.omdbapi.com/?i=${KEY}&s=${query}`,
+            `http://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=${query}`
           );
           // error handeling (error while loading data, i.e. user offline)
 
@@ -238,6 +239,19 @@ function Movie({ movie, handleSelectMovie }) {
 }
 
 function MovieDetail({ selectedId, handleCloseMovie }) {
+  useEffect(function(){
+    async function getMovieDetails(){
+
+      console.log("I'm Effect Insde MovieDetails") ;
+
+      const res = await fetch(`http://www.omdbapi.com/?i=${selectedId}&apikey=${KEY}`);
+      const data = res.json(); 
+      console.log(data);
+    }
+    getMovieDetails();
+  }, []);
+
+
   return (
     <div className="details">
       <button className="btn-back" onClick={handleCloseMovie}>
