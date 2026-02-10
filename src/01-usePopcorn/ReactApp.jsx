@@ -117,6 +117,7 @@ export default function ReactApp() {
         return;
       }
 
+      handleCloseMovie();
       fetchMovies();
       return () => controller.abort();
     },
