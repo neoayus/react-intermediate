@@ -83,6 +83,7 @@ export default function ReactApp() {
 
   useEffect(
     function () {
+      const controller = new AbortController();
       async function fetchMovies() {
         try {
           // loading state (for the time data is still being loaded)
@@ -90,8 +91,7 @@ export default function ReactApp() {
 
           const res = await fetch(
             // `https://www.omdbapi.com/?i=${KEY}&s=${query}`,
-            `http://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=${query}`,
-          );
+            `http://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=${query}`, {signal: controller.signal});
           // error handeling (error while loading data, i.e. user offline)
 
           const data = await res.json();
@@ -116,7 +116,7 @@ export default function ReactApp() {
       }
 
       fetchMovies();
-      // return () => console.log("clean Up");
+      return () => controller.abort();
     },
     [query],
   );
