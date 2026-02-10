@@ -80,7 +80,7 @@ export default function ReactApp() {
 
           const res = await fetch(
             // `https://www.omdbapi.com/?i=${KEY}&s=${query}`,
-            `http://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=${query}`
+            `http://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=${query}`,
           );
           // error handeling (error while loading data, i.e. user offline)
 
@@ -239,26 +239,61 @@ function Movie({ movie, handleSelectMovie }) {
 }
 
 function MovieDetail({ selectedId, handleCloseMovie }) {
-  useEffect(function(){
-    async function getMovieDetails(){
+  const [movie, setMovie] = useState({});
 
-      console.log("I'm Effect Insde MovieDetails") ;
+  // getting data out of the movie obj, cause the variables there are all caps.
+  const{
+    Title: title,
+    Year: year,
+    Poster: poster,
+    Runtime: runtime,
+    imdbRating,
+    Plot: plot,
+    Released: released,
+    Actors: actors,
+    Director: director,
+    Genre: genre,
+  } = movie;
 
-      const res = await fetch(`http://www.omdbapi.com/?i=${selectedId}&apikey=${KEY}`);
-      const data = res.json(); 
-      console.log(data);
+  console.log(year, title);
+
+  useEffect(function () {
+    async function getMovieDetails() {
+      console.log("I'm Effect Insde MovieDetails");
+
+      const res = await fetch(
+        `http://www.omdbapi.com/?i=${selectedId}&apikey=${KEY}`,
+      );
+      const data = await res.json();
+      // console.log(data);
+      setMovie(data);
     }
     getMovieDetails();
   }, []);
 
-
   return (
     <div className="details">
-      <button className="btn-back" onClick={handleCloseMovie}>
-        {" "}
-        &larr;{" "}
-      </button>
-      {selectedId}
+      <header>
+        <button className="btn-back" onClick={handleCloseMovie}> &larr; </button>
+        <img src={poster} alt={`Poster of ${movie} movie`} />
+        <div className="details-overview">
+          <h2>{title}</h2>
+          <p>
+            {released} &bull; {runtime} 
+          </p>
+          <p>{genre}</p> 
+          <p><span> ⭐ </span> {imdbRating} IMDb Ratnig</p>
+        </div>
+        {/* {selectedId} */}
+      </header>
+
+      <section>
+        <p>
+          <em>{plot}</em>
+        </p>
+        <p>Starring {actors} </p>
+        <p>Directed by {director}</p>
+      </section> 
     </div>
   );
 }
