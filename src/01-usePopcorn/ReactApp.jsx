@@ -59,7 +59,8 @@ export default function ReactApp() {
   const [watched, setWatched] = useState(tempWatchedData);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const query = "interstellar";
+  // query state 
+  const [query, setQuery] = useState("interstellar");
 
   useEffect(function () {
     async function fetchMovies() {
@@ -69,10 +70,12 @@ export default function ReactApp() {
 
         const res = await fetch(`https://www.omdbapi.com/?i=${KEY}&s=${query}`);
         // error handeling (error while loading data, i.e. user offline)
-        if (data.Response === "False" )
-          throw new Error("Movie Not Found : ( ");
 
         const data = await res.json();
+
+        if (data.Response === "False" )
+          throw new Error("Movie Not Found : ");
+
         setMovies(data.Search);
         console.log(data.Search);
 
@@ -81,16 +84,24 @@ export default function ReactApp() {
         setError(err.message);
       }finally{
         setIsLoading(false); // loading state
+        setError('');
       }
     }
+
+    if(query.length < 3){ 
+      setMovies([])
+      setError('')
+      return
+    }
+
     fetchMovies();
     return () => console.log("Clean Up");
-  }, []);
+  }, [query]);
 
   return (
     <>
       <Navbar>
-        <Search />
+        <Search query={query} setQuery={setQuery}/>
         <NumResults movies={movies} />
       </Navbar>
       <Main>
@@ -128,8 +139,8 @@ function Logo() {
     </div>
   );
 }
-function Search() {
-  const [query, setQuery] = useState("");
+
+function Search({query, setQuery}) {
   return (
     <input
       className="search"
@@ -140,10 +151,11 @@ function Search() {
     />
   );
 }
+
 function NumResults({ movies }) {
   return (
     <p className="num-results">
-      Found <strong>{movies.length}</strong> results
+      {movies ? <strong>{movies.length}</strong> : <strong> nothing </strong>}
     </p>
   );
 }
