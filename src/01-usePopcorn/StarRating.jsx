@@ -38,7 +38,7 @@ export default function StarRating({
 
   function handleRating(rating) {
     setRating(rating);
-    onSetRating(rating);
+    if (onSetRating) onSetRating(rating);
   }
   function handleHoverIn(rating) {
     setTempRating(rating);
@@ -84,7 +84,7 @@ function Star({ onRate, full, onHoverIn, onHoverOut, color, size }) {
     width: `${size}px`,
     height: `${size}px`,
     display: "block",
-    curson: "pointer",
+    cursor: "pointer",
     color: color,
     size: `${size}px`,
   };
