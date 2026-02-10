@@ -49,6 +49,8 @@ const tempWatchedData = [
   },
 ];
 
+
+
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
@@ -99,7 +101,7 @@ export default function ReactApp() {
           if (data.Response === "False") throw new Error("Movie Not Found : ");
 
           setMovies(data.Search);
-          console.log(data.Search);
+          // console.log(data.Search);
         } catch (err) {
           console.error(err.message);
           setError(err.message);
@@ -278,7 +280,7 @@ function MovieDetail({ selectedId, handleCloseMovie, onAddWatched, watched }) {
     Genre: genre,
   } = movie;
 
-  console.log(year, title);
+  // console.log(year, title);
 
   function handleAdd() {
     const newWatchedMovie = {
@@ -293,12 +295,22 @@ function MovieDetail({ selectedId, handleCloseMovie, onAddWatched, watched }) {
     onAddWatched(newWatchedMovie);
     handleCloseMovie();
   }
+  
+  useEffect(function(){
+    function callback(e){
+      if(e.code === 'Escape'){
+        handleCloseMovie()
+      }
+    }
+    document.addEventListener('keydown', callback)
+    return ()=> document.removeEventListener('keydown', callback);
+  }, [handleCloseMovie])
 
   useEffect(
     function () {
       async function getMovieDetails() {
         setIsLoading(true);
-        console.log("I'm Effect Insde MovieDetails");
+        // console.log("I'm Effect Insde MovieDetails");
 
         const res = await fetch(
           `http://www.omdbapi.com/?i=${selectedId}&apikey=${KEY}`,
@@ -334,8 +346,7 @@ function MovieDetail({ selectedId, handleCloseMovie, onAddWatched, watched }) {
         <>
           <header>
             <button className="btn-back" onClick={handleCloseMovie}>
-              {" "}
-              &larr;{" "}
+              &larr;
             </button>
             <img src={poster} alt={`Poster of ${movie} movie`} />
             <div className="details-overview">
