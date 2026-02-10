@@ -78,7 +78,7 @@ export default function ReactApp() {
   }
 
   function handleDeleteWatched(id) {
-    setWatched((watched)=> watched.filter((movie)=> movie.imdbID !== id ));
+    setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   }
 
   useEffect(
@@ -116,7 +116,7 @@ export default function ReactApp() {
       }
 
       fetchMovies();
-      return () => console.log("clean Up");
+      // return () => console.log("clean Up");
     },
     [query],
   );
@@ -147,7 +147,10 @@ export default function ReactApp() {
           ) : (
             <>
               <WatchedSummary watched={watched} />
-              <WatchedMovieList watched={watched} onDeleteWatched={handleDeleteWatched}/>
+              <WatchedMovieList
+                watched={watched}
+                onDeleteWatched={handleDeleteWatched}
+              />
             </>
           )}
         </Box>
@@ -256,7 +259,9 @@ function MovieDetail({ selectedId, handleCloseMovie, onAddWatched, watched }) {
   const [userRating, setUserRating] = useState(0);
 
   const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
-  const watchedUserRating = watched.find((movie) => movie.imdbID == selectedId)?.userRating; 
+  const watchedUserRating = watched.find(
+    (movie) => movie.imdbID == selectedId,
+  )?.userRating;
   // console.log(isWatched);
 
   // getting data out of the movie obj, cause the variables there are all caps.
@@ -307,12 +312,19 @@ function MovieDetail({ selectedId, handleCloseMovie, onAddWatched, watched }) {
     },
     [selectedId],
   );
-  
-  // effect to change title 
-  useEffect(function(){
-    if (!title) return ; 
-    document.title = `Movie | ${title}` ; 
-  }, [title])
+
+  // effect to change title
+  useEffect(
+    function () {
+      if (!title) return;
+      document.title = `Movie | ${title}`;
+      
+      return function(){
+        document.title = "usePopcorn" ; 
+      }
+    },
+    [title],
+  );
 
   return (
     <div className="details">
@@ -403,13 +415,17 @@ function WatchedMovieList({ watched, onDeleteWatched }) {
   return (
     <ul className="list">
       {watched.map((movie) => (
-        <WatchedMovie key={movie.imdbID} movie={movie} onDeleteWatched={onDeleteWatched}/>
+        <WatchedMovie
+          key={movie.imdbID}
+          movie={movie}
+          onDeleteWatched={onDeleteWatched}
+        />
       ))}
     </ul>
   );
 }
 
-function WatchedMovie({ movie, onDeleteWatched}) {
+function WatchedMovie({ movie, onDeleteWatched }) {
   return (
     <li>
       <img src={movie.poster} alt={`${movie.title} poster`} />
@@ -427,7 +443,13 @@ function WatchedMovie({ movie, onDeleteWatched}) {
           <span>⏳</span>
           <span>{movie.runtime} min</span>
         </p>
-        <button className="btn-delete" onClick={()=> onDeleteWatched(movie.imdbID)}> X </button>
+        <button
+          className="btn-delete"
+          onClick={() => onDeleteWatched(movie.imdbID)}
+        >
+          {" "}
+          X{" "}
+        </button>
       </div>
     </li>
   );
