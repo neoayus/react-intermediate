@@ -307,6 +307,12 @@ function MovieDetail({ selectedId, handleCloseMovie, onAddWatched, watched }) {
     },
     [selectedId],
   );
+  
+  // effect to change title 
+  useEffect(function(){
+    if (!title) return ; 
+    document.title = `Movie | ${title}` ; 
+  }, [title])
 
   return (
     <div className="details">
