@@ -18,7 +18,7 @@
 
 html {
   font-size: 62.5%;
-  overflow: hidden;
+  overflow: auto;
 }
 
 body {
@@ -50,14 +50,19 @@ body {
   justify-content: center;
 }
 
+
 .box {
   width: 42rem;
   max-width: 42rem;
   background-color: var(--color-background-500);
   border-radius: 0.9rem;
-  /* overflow: scroll; */
-  overflow: hidden;
+  overflow: scroll;
+  overflow: scroll;
   position: relative;
+}
+
+.box::-webkit-scrollbar{
+  display: none ; 
 }
 
 .loader {
@@ -140,9 +145,13 @@ body {
 .list {
   list-style: none;
   padding: 0.8rem 0;
-  /* overflow: scroll; */
+  overflow: scroll;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+list::-webkit-scrollbar{
+  display: none ; 
 }
 
 .list-watched {
