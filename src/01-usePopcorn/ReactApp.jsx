@@ -3,6 +3,7 @@ import StarRating from "./StarRating.jsx";
 import { useEffect, useRef, useState } from "react";
 import { useMovies } from "./useMovies.jsx";
 import { useLocalStorage } from "./useLocalStorage.jsx";
+import { useKey } from "./useKey.jsx";
 
 // const tempMovieData = [
 //   {
@@ -210,20 +211,27 @@ function Search({ query, setQuery }) {
   
   // re-write previous function using useRef
   const inputElement = useRef(null);
-  useEffect(function(){
-    // don't run when  
-
-    function callback(e){
-      if(e.code === 'Enter'){
-        if(document.activeElement === inputElement.current) return ; // do nothing when it's already focused   
-        inputElement.current.focus(); // inputElement.current is dom element itself 
-        setQuery('');
-      }
+  
+  useKey('Enter', function(){
+      if(document.activeElement === inputElement.current) return; 
+      inputElement.current.focus(); 
+      setQuery('');
     }
-    document.addEventListener('keydown', callback)
-    // console.log(inputElement.current);
-    return() => document.removeEventListener('keydown', callback); // clean up function  
-  }, [setQuery])
+  )
+
+  // useEffect(function(){
+  //   // don't run when  
+  //   function callback(e){
+  //     if(e.code === 'Enter'){
+  //       if(document.activeElement === inputElement.current) return ; // do nothing when it's already focused   
+  //       inputElement.current.focus(); // inputElement.current is dom element itself 
+  //       setQuery('');
+  //     }
+  //   }
+  //   document.addEventListener('keydown', callback)
+  //   // console.log(inputElement.current);
+  //   return() => document.removeEventListener('keydown', callback); // clean up function  
+  // }, [setQuery])
 
   return (
     <input
@@ -303,6 +311,7 @@ function MovieDetail({ selectedId, handleCloseMovie, onAddWatched, watched }) {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [userRating, setUserRating] = useState(0);
+  
 
   // const countRef = useRef(0); 
   // useEffect(
@@ -347,15 +356,20 @@ function MovieDetail({ selectedId, handleCloseMovie, onAddWatched, watched }) {
     handleCloseMovie();
   }
   
-  useEffect(function(){
-    function callback(e){
-      if(e.code === 'Escape'){
-        handleCloseMovie()
-      }
-    }
-    document.addEventListener('keydown', callback)
-    return ()=> document.removeEventListener('keydown', callback);
-  }, [handleCloseMovie])
+  // MOVE: ./useKey.jsx (custom hook)
+  // useEffect(function(){
+  //   function callback(e){
+  //     if(e.code === 'Escape'){
+  //       handleCloseMovie()
+  //     }
+  //   }
+  //   document.addEventListener('keydown', callback)
+  //   return ()=> document.removeEventListener('keydown', callback);
+  // }, [handleCloseMovie])
+
+  // cusom hook call 
+  useKey('Escape', handleCloseMovie)
+
 
   useEffect(
     function () {
