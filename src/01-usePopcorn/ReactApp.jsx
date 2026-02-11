@@ -2,6 +2,7 @@ import "./Index.css";
 import StarRating from "./StarRating.jsx";
 import { useEffect, useRef, useState } from "react";
 import { useMovies } from "./useMovies.jsx";
+import { useLocalStorage } from "./useLocalStorage.jsx";
 
 // const tempMovieData = [
 //   {
@@ -65,12 +66,14 @@ export default function ReactApp() {
   
   // custo hook call 
   const {movies, isLoading, error} = useMovies(query, handleCloseMovie)
+  const [watched, setWatched] = useLocalStorage([], 'watched') ;
+
+  // const [watched, setWatched] = useState(()=>{
+  //   const storedValue = localStorage.getItem('watched');
+  //   return JSON.parse(storedValue);
+  // });
 
   // const [watched, setWatched] = useState([]);
-  const [watched, setWatched] = useState(()=>{
-    const storedValue = localStorage.getItem('watched');
-    return JSON.parse(storedValue);
-  });
 
 
   function handleSelectMovie(id) {
@@ -134,10 +137,10 @@ export default function ReactApp() {
   //   [query],
   // );
   
-  // effect: save data in browser 
-  useEffect(function(){
-    localStorage.setItem('watched', JSON.stringify(watched));
-  }, [watched])
+  // MOVE : ./useLocalStorage (custom hook )
+  // useEffect(function(){
+  //   localStorage.setItem('watched', JSON.stringify(watched));
+  // }, [watched])
 
   return (
     <>
