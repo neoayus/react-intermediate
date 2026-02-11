@@ -60,9 +60,14 @@ const KEY = "9c6a2e51";
 export default function ReactApp() {
   const [query, setQuery] = useState("");
   const [movies, setMovies] = useState(tempMovieData);
-  const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // const [watched, setWatched] = useState([]);
+  const [watched, setWatched] = useState(()=>{
+    const storedValue = localStorage.getItem('watched');
+    return JSON.parse(storedValue);
+  });
 
   // state for selected movie
   const [selectedId, setSelectedId] = useState(null);
