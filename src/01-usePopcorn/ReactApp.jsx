@@ -1,6 +1,6 @@
 import "./Index.css";
 import StarRating from "./StarRating.jsx";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const tempMovieData = [
   {
@@ -195,6 +195,30 @@ function Logo() {
 }
 
 function Search({ query, setQuery }) {
+  // function: focus on search bar when the page loads
+  // useEffect(function(){
+  //   const el = document.querySelector(".search");
+  //   // console.log(el);
+  //   el.focus();
+  // },[]) 
+  
+  // re-write previous function using useRef
+  const inputElement = useRef(null);
+  useEffect(function(){
+    // don't run when  
+
+    function callback(e){
+      if(e.code === 'Enter'){
+        if(document.activeElement === inputElement.current) return ; // do nothing when it's already focused   
+        inputElement.current.focus(); // inputElement.current is dom element itself 
+        setQuery('');
+      }
+    }
+    document.addEventListener('keydown', callback)
+    // console.log(inputElement.current);
+    return() => document.removeEventListener('keydown', callback); // clean up function  
+  }, [setQuery])
+
   return (
     <input
       className="search"
@@ -202,6 +226,7 @@ function Search({ query, setQuery }) {
       placeholder="Search movies..."
       value={query}
       onChange={(e) => setQuery(e.target.value)}
+      ref ={inputElement} // reference to this element, in ref.  
     />
   );
 }
