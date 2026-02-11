@@ -1,30 +1,31 @@
 import "./Index.css";
 import StarRating from "./StarRating.jsx";
 import { useEffect, useRef, useState } from "react";
+import { useMovies } from "./useMovies.jsx";
 
-const tempMovieData = [
-  {
-    imdbID: "tt1375666",
-    Title: "Inception",
-    Year: "2010",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
-  },
-  {
-    imdbID: "tt0133093",
-    Title: "The Matrix",
-    Year: "1999",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
-  },
-  {
-    imdbID: "tt6751668",
-    Title: "Parasite",
-    Year: "2019",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg",
-  },
-];
+// const tempMovieData = [
+//   {
+//     imdbID: "tt1375666",
+//     Title: "Inception",
+//     Year: "2010",
+//     Poster:
+//       "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
+//   },
+//   {
+//     imdbID: "tt0133093",
+//     Title: "The Matrix",
+//     Year: "1999",
+//     Poster:
+//       "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
+//   },
+//   {
+//     imdbID: "tt6751668",
+//     Title: "Parasite",
+//     Year: "2019",
+//     Poster:
+//       "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg",
+//   },
+// ];
 
 const tempWatchedData = [
   {
@@ -59,9 +60,11 @@ const KEY = "9c6a2e51";
 
 export default function ReactApp() {
   const [query, setQuery] = useState("");
-  const [movies, setMovies] = useState(tempMovieData);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  // state for selected movie
+  const [selectedId, setSelectedId] = useState(null);
+  
+  // custo hook call 
+  const {movies, isLoading, error} = useMovies(query, handleCloseMovie)
 
   // const [watched, setWatched] = useState([]);
   const [watched, setWatched] = useState(()=>{
@@ -69,8 +72,6 @@ export default function ReactApp() {
     return JSON.parse(storedValue);
   });
 
-  // state for selected movie
-  const [selectedId, setSelectedId] = useState(null);
 
   function handleSelectMovie(id) {
     setSelectedId((selectedId) => (id === selectedId ? null : id));
@@ -79,6 +80,7 @@ export default function ReactApp() {
   function handleCloseMovie() {
     setSelectedId(null);
   }
+
 
   function handleAddWatched(movie) {
     setWatched((watched) => [...watched, movie]);
@@ -90,46 +92,47 @@ export default function ReactApp() {
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   }
 
-  useEffect(
-    function () {
-      const controller = new AbortController();
-      async function fetchMovies() {
-        try {
-          // loading state (for the time data is still being loaded)
-          setIsLoading(true);
+  // MOVED TO : ./useMovies.jsx (as a custom hook )
+  // useEffect(
+  //   function () {
+  //     const controller = new AbortController();
+  //     async function fetchMovies() {
+  //       try {
+  //         // loading state (for the time data is still being loaded)
+  //         setIsLoading(true);
 
-          const res = await fetch(
-            // `https://www.omdbapi.com/?i=${KEY}&s=${query}`,
-            `http://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=${query}`, {signal: controller.signal});
-          // error handeling (error while loading data, i.e. user offline)
+  //         const res = await fetch(
+  //           // `https://www.omdbapi.com/?i=${KEY}&s=${query}`,
+  //           `http://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=${query}`, {signal: controller.signal});
+  //         // error handeling (error while loading data, i.e. user offline)
 
-          const data = await res.json();
+  //         const data = await res.json();
 
-          if (data.Response === "False") throw new Error("Movie Not Found : ");
+  //         if (data.Response === "False") throw new Error("Movie Not Found : ");
 
-          setMovies(data.Search);
-          // console.log(data.Search);
-        } catch (err) {
-          console.error(err.message);
-          setError(err.message);
-        } finally {
-          setIsLoading(false); // loading state
-          setError("");
-        }
-      }
+  //         setMovies(data.Search);
+  //         // console.log(data.Search);
+  //       } catch (err) {
+  //         console.error(err.message);
+  //         setError(err.message);
+  //       } finally {
+  //         setIsLoading(false); // loading state
+  //         setError("");
+  //       }
+  //     }
 
-      if (query.length < 3) {
-        setMovies([]);
-        setError("");
-        return;
-      }
+  //     if (query.length < 3) {
+  //       setMovies([]);
+  //       setError("");
+  //       return;
+  //     }
 
-      handleCloseMovie();
-      fetchMovies();
-      return () => controller.abort();
-    },
-    [query],
-  );
+  //     handleCloseMovie();
+  //     fetchMovies();
+  //     return () => controller.abort();
+  //   },
+  //   [query],
+  // );
   
   // effect: save data in browser 
   useEffect(function(){
@@ -306,10 +309,10 @@ function MovieDetail({ selectedId, handleCloseMovie, onAddWatched, watched }) {
   //   [userRating]
   // )
 
-  // const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
-  // const watchedUserRating = watched.find(
-  //   (movie) => movie.imdbID == selectedId,
-  // )?.userRating;
+  const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
+  const watchedUserRating = watched.find(
+    (movie) => movie.imdbID == selectedId,
+  )?.userRating;
 
   // getting data out of the movie obj, cause the variables there are all caps.
   const {
