@@ -77,6 +77,8 @@ export default function ReactApp() {
 
   function handleAddWatched(movie) {
     setWatched((watched) => [...watched, movie]);
+    // store data in browser's local storage
+    // localStorage.setItem('watched', JSON.stringify([...watched, movie]));
   }
 
   function handleDeleteWatched(id) {
@@ -123,6 +125,11 @@ export default function ReactApp() {
     },
     [query],
   );
+  
+  // effect: save data in browser 
+  useEffect(function(){
+    localStorage.setItem('watched', JSON.stringify(watched));
+  }, [watched])
 
   return (
     <>
