@@ -3,7 +3,7 @@ import './Index.css';
 import { useEffect, useReducer } from 'react';
 
 import Header from './components/Header';
-import Main from './Main';
+import Main from './components/Main';
 import Loader from './components/Loader';
 import Error from './components/Error';
 import StartScreen from './components/StartScreen';
