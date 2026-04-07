@@ -51,9 +51,6 @@ function reducer(state, action) {
         balance: 0,
         account: false,
       };
-
-    default:
-      return state;
   }
 }
 
