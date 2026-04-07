@@ -1,11 +1,9 @@
-// import ReactApp from './01-usePopcorn/ReactApp.jsx'
-// import GeoLocate from './Challange03-useGeoLocate/GeoLocate.jsx'
+import Bank from './Challange04-useReducerBank/Bank'
 
 function App() {
   return (
     <>
-      {/* <ReactApp/> */}
-      {/* <GeoLocate /> */}
+      <Bank />
     </>
   )
 }
